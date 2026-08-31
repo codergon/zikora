@@ -1,4 +1,5 @@
 import { act, render, screen, waitFor } from "@testing-library/react-native";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 import { HomeScreen } from "../src/screens/HomeScreen";
 import { MockBankApi } from "../src/services/mockBankApi";
@@ -8,9 +9,21 @@ jest.mock("@expo/vector-icons", () => ({
 }));
 
 describe("HomeScreen", () => {
+  const renderHome = (api: MockBankApi) =>
+    render(
+      <SafeAreaProvider
+        initialMetrics={{
+          frame: { x: 0, y: 0, width: 390, height: 844 },
+          insets: { top: 47, left: 0, right: 0, bottom: 34 },
+        }}
+      >
+        <HomeScreen api={api} firstName="Richard" onLogout={jest.fn()} />
+      </SafeAreaProvider>,
+    );
+
   test("loads transactions into a bounded virtualized list", async () => {
     const api = new MockBankApi({ wait: async () => undefined });
-    render(<HomeScreen api={api} firstName="Richard" onLogout={jest.fn()} />);
+    renderHome(api);
 
     await waitFor(() => {
       expect(screen.getByTestId("transaction-list").props.data).toHaveLength(
@@ -28,7 +41,7 @@ describe("HomeScreen", () => {
 
   test("preserves visible transactions when pull-to-refresh fails", async () => {
     const api = new MockBankApi({ wait: async () => undefined });
-    render(<HomeScreen api={api} firstName="Richard" onLogout={jest.fn()} />);
+    renderHome(api);
 
     await waitFor(() => {
       expect(screen.getByText("Airtime purchase")).toBeTruthy();

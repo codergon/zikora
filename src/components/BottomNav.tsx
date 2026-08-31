@@ -1,7 +1,16 @@
-import { Ionicons } from "@expo/vector-icons";
 import { Pressable, StyleSheet, Text, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { colors } from "../theme";
+import { colors, fonts } from "../theme";
+import {
+  CardIcon,
+  CoinIcon,
+  HomeIcon,
+  Icon,
+  ProfileIcon,
+  SendIcon,
+  SvgIconComponent,
+} from "./icon";
 
 type BottomNavProps = {
   active: "home" | "pay";
@@ -11,29 +20,39 @@ type BottomNavProps = {
 };
 
 const inactiveItems = [
-  { label: "Budget", icon: "pie-chart-outline" as const },
-  { label: "Cards", icon: "card-outline" as const },
+  { label: "Budget", icon: CoinIcon },
+  { label: "Cards", icon: CardIcon },
 ];
 
 export function BottomNav({ active, onHome, onPay, onLogout }: BottomNavProps) {
+  const insets = useSafeAreaInsets();
+
   return (
-    <View style={styles.shell}>
+    <View
+      style={[
+        styles.shell,
+        {
+          minHeight: 68 + Math.max(insets.bottom, 8),
+          paddingBottom: Math.max(insets.bottom, 8),
+        },
+      ]}
+    >
       <NavItem
         label="Home"
-        icon="home-outline"
+        icon={HomeIcon}
         active={active === "home"}
         onPress={onHome}
       />
       <NavItem
         label="Pay"
-        icon="paper-plane-outline"
+        icon={SendIcon}
         active={active === "pay"}
         onPress={onPay}
       />
       {inactiveItems.map((item) => (
         <NavItem key={item.label} label={item.label} icon={item.icon} />
       ))}
-      <NavItem label="Account" icon="person-outline" onPress={onLogout} />
+      <NavItem label="Account" icon={ProfileIcon} onPress={onLogout} />
     </View>
   );
 }
@@ -45,7 +64,7 @@ function NavItem({
   onPress,
 }: {
   label: string;
-  icon: keyof typeof Ionicons.glyphMap;
+  icon: SvgIconComponent;
   active?: boolean;
   onPress?: () => void;
 }) {
@@ -58,7 +77,7 @@ function NavItem({
       onPress={onPress}
       style={styles.item}
     >
-      <Ionicons name={icon} size={23} color={active ? colors.ink : "#AAAAAA"} />
+      <Icon source={icon} size={23} color={active ? colors.ink : "#AAAAAA"} />
       <Text style={[styles.label, active && styles.activeLabel]}>{label}</Text>
     </Pressable>
   );
@@ -66,11 +85,9 @@ function NavItem({
 
 const styles = StyleSheet.create({
   shell: {
-    minHeight: 76,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-around",
-    paddingBottom: 8,
     borderTopWidth: StyleSheet.hairlineWidth,
     borderTopColor: "#EEEEEE",
     backgroundColor: colors.surface,
@@ -85,9 +102,10 @@ const styles = StyleSheet.create({
   label: {
     color: "#AAAAAA",
     fontSize: 11,
+    fontFamily: fonts.regular,
   },
   activeLabel: {
     color: colors.ink,
-    fontWeight: "700",
+    fontFamily: fonts.bold,
   },
 });

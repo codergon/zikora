@@ -14,7 +14,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { FormField } from "../components/FormField";
 import { PrimaryButton } from "../components/PrimaryButton";
 import { MockScenario, MockServiceError } from "../services/mockBankApi";
-import { colors } from "../theme";
+import { colors, fonts } from "../theme";
 
 type LoginScreenProps = {
   onLogin: (
@@ -32,7 +32,11 @@ const scenarioEmails: Record<string, MockScenario> = {
   "delayed@zikora.test": "delayed",
 };
 
+const accountTypes = ["Personal Account", "Business Account"] as const;
+type AccountType = (typeof accountTypes)[number];
+
 export function LoginScreen({ onLogin }: LoginScreenProps) {
+  const [accountType, setAccountType] = useState<AccountType>("Personal Account");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -94,20 +98,24 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
         >
           <View style={styles.handle} />
           <View style={styles.segmentedControl} accessibilityRole="tablist">
-            <View
-              style={styles.activeSegment}
-              accessibilityRole="tab"
-              accessibilityState={{ selected: true }}
-            >
-              <Text style={styles.activeSegmentText}>Personal Account</Text>
-            </View>
-            <View
-              accessibilityRole="tab"
-              accessibilityState={{ selected: false }}
-              style={styles.segment}
-            >
-              <Text style={styles.segmentText}>Business Account</Text>
-            </View>
+            {accountTypes.map((type) => {
+              const selected = type === accountType;
+              return (
+                <Pressable
+                  key={type}
+                  accessibilityRole="tab"
+                  accessibilityState={{ selected }}
+                  onPress={() => setAccountType(type)}
+                  style={[styles.segment, selected && styles.activeSegment]}
+                >
+                  <Text
+                    style={selected ? styles.activeSegmentText : styles.segmentText}
+                  >
+                    {type}
+                  </Text>
+                </Pressable>
+              );
+            })}
           </View>
 
           <Text style={styles.title}>Login to your account</Text>
@@ -123,6 +131,7 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
             returnKeyType="next"
             editable={!loading}
             error={emailError}
+            fontFamily={fonts.loginRegular}
           />
           <FormField
             label="Password"
@@ -135,6 +144,7 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
             returnKeyType="done"
             editable={!loading}
             error={passwordError}
+            fontFamily={fonts.loginRegular}
             onSubmitEditing={handleLogin}
             right={
               <Pressable
@@ -179,6 +189,7 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
             onPress={handleLogin}
             disabled={!canSubmit}
             loading={loading}
+            fontFamily={fonts.loginBold}
           />
 
           <View style={styles.dividerRow}>
@@ -203,7 +214,7 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
 
 const styles = StyleSheet.create({
   flex: { flex: 1 },
-  safeArea: { flex: 1, backgroundColor: "#6E7B74" },
+  safeArea: { flex: 1, backgroundColor: colors.surface },
   scrim: { height: 92, backgroundColor: "#6E7B74" },
   sheet: {
     flexGrow: 1,
@@ -241,18 +252,27 @@ const styles = StyleSheet.create({
   activeSegmentText: {
     color: colors.surface,
     fontSize: 16,
-    fontWeight: "600",
+    fontFamily: fonts.loginSemiBold,
   },
-  segmentText: { color: "#888888", fontSize: 16 },
+  segmentText: {
+    color: "#888888",
+    fontSize: 16,
+    fontFamily: fonts.loginRegular,
+  },
   title: {
     marginTop: 4,
     color: "#050505",
     fontSize: 30,
     lineHeight: 36,
-    fontWeight: "700",
+    fontFamily: fonts.loginBold,
   },
   forgotPassword: { alignSelf: "flex-end", marginTop: -12 },
-  link: { color: colors.green, fontSize: 16, textDecorationLine: "underline" },
+  link: {
+    color: colors.green,
+    fontSize: 16,
+    fontFamily: fonts.loginRegular,
+    textDecorationLine: "underline",
+  },
   errorBanner: {
     flexDirection: "row",
     alignItems: "center",
@@ -261,7 +281,12 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: colors.dangerSoft,
   },
-  errorText: { flex: 1, color: colors.danger, fontSize: 14 },
+  errorText: {
+    flex: 1,
+    color: colors.danger,
+    fontSize: 14,
+    fontFamily: fonts.loginRegular,
+  },
   dividerRow: {
     flexDirection: "row",
     alignItems: "center",
@@ -273,7 +298,11 @@ const styles = StyleSheet.create({
     height: StyleSheet.hairlineWidth,
     backgroundColor: "#BDBDBD",
   },
-  dividerText: { color: "#999999", fontSize: 14 },
+  dividerText: {
+    color: "#999999",
+    fontSize: 14,
+    fontFamily: fonts.loginRegular,
+  },
   secondaryButton: {
     minHeight: 52,
     alignItems: "center",
@@ -285,7 +314,7 @@ const styles = StyleSheet.create({
   secondaryButtonText: {
     color: colors.green,
     fontSize: 17,
-    fontWeight: "600",
+    fontFamily: fonts.loginSemiBold,
   },
   supportRow: {
     flexDirection: "row",
@@ -293,5 +322,9 @@ const styles = StyleSheet.create({
     gap: 8,
     marginTop: 26,
   },
-  supportText: { color: "#888888", fontSize: 16 },
+  supportText: {
+    color: "#888888",
+    fontSize: 16,
+    fontFamily: fonts.loginRegular,
+  },
 });

@@ -1,28 +1,39 @@
-import { Ionicons } from "@expo/vector-icons";
 import { StyleSheet, Text, View } from "react-native";
 
 import { Transaction } from "../../domain/models";
 import { describeNaira, formatNaira } from "../../domain/money";
-import { colors } from "../../theme";
+import { colors, fonts } from "../../theme";
+import { Icon, MoneyReceiveIcon, MoneySendIcon, PhoneIcon } from "../icon";
 
 export function TransactionRow({ transaction }: { transaction: Transaction }) {
   const credit = transaction.direction === "credit";
+  const airtime = transaction.category === "airtime";
   const occurredAt = new Date(transaction.occurredAt);
+
+  const iconSource = airtime
+    ? PhoneIcon
+    : credit
+      ? MoneyReceiveIcon
+      : MoneySendIcon;
+  const iconColor = airtime
+    ? colors.warning
+    : credit
+      ? colors.green
+      : colors.danger;
 
   return (
     <View style={styles.row}>
       <View
-        style={[styles.icon, credit ? styles.creditIcon : styles.debitIcon]}
+        style={[
+          styles.icon,
+          airtime
+            ? styles.airtimeIcon
+            : credit
+              ? styles.creditIcon
+              : styles.debitIcon,
+        ]}
       >
-        <Ionicons
-          name={
-            transaction.category === "airtime"
-              ? "phone-portrait-outline"
-              : "cash-outline"
-          }
-          size={21}
-          color={credit ? colors.green : colors.danger}
-        />
+        <Icon source={iconSource} size={20} color={iconColor} />
       </View>
       <View style={styles.copy}>
         <Text numberOfLines={1} style={styles.title}>
@@ -63,10 +74,16 @@ const styles = StyleSheet.create({
   },
   creditIcon: { backgroundColor: colors.greenSoft },
   debitIcon: { backgroundColor: colors.dangerSoft },
+  airtimeIcon: { backgroundColor: colors.warningSoft },
   copy: { flex: 1, marginLeft: 12, marginRight: 8 },
-  title: { color: colors.text, fontSize: 16, fontWeight: "600" },
-  date: { marginTop: 4, color: "#555555", fontSize: 13 },
-  amount: { fontSize: 15, fontWeight: "600" },
+  title: { color: colors.text, fontSize: 16, fontFamily: fonts.semiBold },
+  date: {
+    marginTop: 4,
+    color: "#555555",
+    fontSize: 13,
+    fontFamily: fonts.regular,
+  },
+  amount: { fontSize: 15, fontFamily: fonts.semiBold },
   creditText: { color: "#5D9478" },
   debitText: { color: colors.danger },
 });
