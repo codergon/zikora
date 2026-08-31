@@ -1,6 +1,6 @@
 import { ActivityIndicator, Pressable, StyleSheet, Text } from "react-native";
 
-import { colors } from "../theme";
+import { colors, fonts } from "../theme";
 
 type PrimaryButtonProps = {
   label: string;
@@ -8,6 +8,7 @@ type PrimaryButtonProps = {
   disabled?: boolean;
   loading?: boolean;
   accessibilityLabel?: string;
+  fontFamily?: string;
 };
 
 export function PrimaryButton({
@@ -16,6 +17,7 @@ export function PrimaryButton({
   disabled = false,
   loading = false,
   accessibilityLabel,
+  fontFamily = fonts.bold,
 }: PrimaryButtonProps) {
   const unavailable = disabled || loading;
 
@@ -35,7 +37,7 @@ export function PrimaryButton({
       {loading ? (
         <ActivityIndicator color={colors.surface} />
       ) : (
-        <Text style={styles.label}>{label}</Text>
+        <Text style={[styles.label, { fontFamily }]}>{label}</Text>
       )}
     </Pressable>
   );
@@ -59,6 +61,5 @@ const styles = StyleSheet.create({
   label: {
     color: colors.surface,
     fontSize: 17,
-    fontWeight: "700",
   },
 });

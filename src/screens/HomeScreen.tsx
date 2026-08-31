@@ -14,7 +14,7 @@ import { TransactionRow } from "../components/home/TransactionRow";
 import { Transaction } from "../domain/models";
 import { TransactionFeed } from "../domain/transactions";
 import { MockBankApi } from "../services/mockBankApi";
-import { colors } from "../theme";
+import { colors, fonts } from "../theme";
 
 type HomeScreenProps = {
   api: MockBankApi;
@@ -163,5 +163,10 @@ const styles = StyleSheet.create({
   content: { paddingHorizontal: 20, paddingBottom: 18 },
   loader: { marginTop: 48 },
   footerLoader: { marginVertical: 18 },
-  emptyText: { marginTop: 48, color: colors.muted, textAlign: "center" },
+  emptyText: {
+    marginTop: 48,
+    color: colors.muted,
+    textAlign: "center",
+    fontFamily: fonts.regular,
+  },
 });

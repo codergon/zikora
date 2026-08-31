@@ -7,34 +7,38 @@ import {
   View,
 } from "react-native";
 
-import { colors } from "../theme";
+import { colors, fonts } from "../theme";
 
 type FormFieldProps = TextInputProps & {
   label: string;
   error?: string;
   right?: ReactNode;
+  fontFamily?: string;
 };
 
 export function FormField({
   label,
   error,
   right,
+  fontFamily = fonts.regular,
   style,
   ...inputProps
 }: FormFieldProps) {
   return (
     <View style={styles.group}>
-      <Text style={styles.label}>{label}</Text>
+      <Text style={[styles.label, { fontFamily }]}>{label}</Text>
       <View style={[styles.inputShell, error && styles.inputError]}>
         <TextInput
           accessibilityLabel={inputProps.accessibilityLabel ?? label}
           placeholderTextColor="#999999"
-          style={[styles.input, style]}
+          style={[styles.input, { fontFamily }, style]}
           {...inputProps}
         />
         {right}
       </View>
-      {error ? <Text style={styles.error}>{error}</Text> : null}
+      {error ? (
+        <Text style={[styles.error, { fontFamily }]}>{error}</Text>
+      ) : null}
     </View>
   );
 }
