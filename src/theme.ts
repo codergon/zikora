@@ -13,3 +13,15 @@ export const colors = {
   warning: "#A96600",
   warningSoft: "#FFF4DB",
 } as const;
+
+export const fonts = {
+  regular: "Raleway_400Regular",
+  medium: "Raleway_500Medium",
+  semiBold: "Raleway_600SemiBold",
+  bold: "Raleway_700Bold",
+  extraBold: "Raleway_800ExtraBold",
+  loginRegular: "InterTight_400Regular",
+  loginMedium: "InterTight_500Medium",
+  loginSemiBold: "InterTight_600SemiBold",
+  loginBold: "InterTight_700Bold",
+} as const;
