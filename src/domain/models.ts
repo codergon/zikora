@@ -42,3 +42,14 @@ export type Receipt = {
   bankName: string;
   narration: string;
 };
+
+export type TransferOutcome =
+  | { status: "success"; receipt: Receipt }
+  | { status: "rejected"; message: string }
+  | { status: "failed"; message: string; retryable: boolean }
+  | { status: "unknown"; message: string };
+
+export type TransferState =
+  | { status: "idle" }
+  | { status: "pending"; requestKey: string }
+  | TransferOutcome;
