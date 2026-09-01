@@ -2,6 +2,10 @@
 
 Zikora is an Expo React Native banking prototype built for the Mobile Developer Take-Home Challenge. It includes secure mock authentication, a virtualized transaction feed, a duplicate-safe transfer flow, and receipts shown only after confirmed transfers.
 
+## Demo recording
+
+**[▶ Watch the walkthrough:](https://drive.google.com/file/d/1StPlNoQaLfFySajK4ZtdzE9oX0f1FXQw/view?usp=sharing)** cold launch, UI fidelity, scrolling, a failed refresh that keeps cached data, repeat-tap protection, pending/unknown handling, and a confirmed receipt.
+
 ## Run the app
 
 Requirements: Node.js 22.13+ or 24.3+, Yarn 1.22, and an Android emulator or Expo Go-compatible device.
